@@ -27,53 +27,25 @@ public class BowlingScorerTest {
     }
 
     @DataProvider
-    public static Object[][] only1PinDownInTheWholeGameDataProvider() {
+    public static Object[][] onlyOneRollWithPinsDownInTheWholeGameDataProvider() {
         return new Object[][] {
-                {"1-------------------"},
-                {"--1-----------------"},
-                {"-------------------1"},
-                {"------------1-------"},
-        };
-    }
-
-    @DataProvider
-    public static Object[][] only2PinDownInTheWholeGameDataProvider() {
-        return new Object[][] {
-                {"2-------------------"},
-                {"--2-----------------"},
-                {"-------------------2"},
-                {"------------2-------"},
-        };
-    }
-
-    @DataProvider
-    public static Object[][] only3PinDownInTheWholeGameDataProvider() {
-        return new Object[][] {
-                {"3-------------------"},
-                {"--3-----------------"},
-                {"-------------------3"},
-                {"------------3-------"},
+                {"1-------------------", 1},
+                {"------------1-------", 1},
+                {"--2-----------------", 2},
+                {"-------2------------", 2},
+                {"-------------------3", 3},
+                {"------------3-------", 3},
         };
     }
 
     @Test
-    @UseDataProvider("only1PinDownInTheWholeGameDataProvider")
-    public void scorerIs1WhenOnly1PinDownInTheWholeGame(String game) {
+    @UseDataProvider("onlyOneRollWithPinsDownInTheWholeGameDataProvider")
+    public void scorerIsSameThanPinWhenOneRollWithPinDowns(String game, int totalScoreExpected) {
         int totalScore = this.bowlingScorer.totalScoreFromAGame(game);
-        assertEquals("When only 1 pin down in the whole game must be 1", 1, totalScore);
-    }
-
-    @Test
-    @UseDataProvider("only2PinDownInTheWholeGameDataProvider")
-    public void scorerIs2WhenOnly2PinDownInTheWholeGame(String game) {
-        int totalScore = this.bowlingScorer.totalScoreFromAGame(game);
-        assertEquals("When only 2 pin down in the whole game must be 2", 2, totalScore);
-    }
-
-    @Test
-    @UseDataProvider("only3PinDownInTheWholeGameDataProvider")
-    public void scorerIs3WhenOnly3PinDownInTheWholeGame(String game) {
-        int totalScore = this.bowlingScorer.totalScoreFromAGame(game);
-        assertEquals("When only 3 pin down in the whole game must be 3", 3, totalScore);
+        assertEquals(
+                "Scorer is " + totalScore + " when game is " + game,
+                totalScoreExpected,
+                totalScore
+        );
     }
 }
