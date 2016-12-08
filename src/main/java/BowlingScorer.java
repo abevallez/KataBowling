@@ -8,21 +8,18 @@ public class BowlingScorer {
     /**
      * Produce the total Score from a Bowling Game
      *
-     * @param game
+     * @param game String
      * @return int
      */
     public int totalScoreFromAGame(String game) {
+        int i;
+        char roll;
 
-        if (game.contains("1")) {
-            return 1;
-        }
-
-        if (game.contains("2")) {
-            return 2;
-        }
-
-        if (game.contains("3")) {
-            return 3;
+        for (i=0; i<game.length(); i++) {
+            roll = game.charAt(i);
+            if (Character.isDigit(roll)) {
+                return Character.getNumericValue(roll);
+            }
         }
 
         return 0;
