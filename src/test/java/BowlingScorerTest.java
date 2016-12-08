@@ -118,4 +118,10 @@ public class BowlingScorerTest {
         int totalScore = this.bowlingScorer.totalScoreFromAGame(game);
         assertEquals("spare sum 9 to total score with bonus roll missed", totalScoreExpected, totalScore);
     }
+
+    @Test
+    public void nextRollPinDownsCountsTwiceWhenSpare() {
+        int totalScore = this.bowlingScorer.totalScoreFromAGame("-/1-----------------");
+        assertEquals("next roll pin downs counts twice when spare", 11, totalScore);
+    }
 }

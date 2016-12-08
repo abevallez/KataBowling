@@ -19,18 +19,25 @@ public class BowlingScorer {
         int totalScore = 0;
         int previousSum = 0;
         int pinDowns;
+        boolean bonus = false;
 
         for (i=0; i<game.length(); i++) {
             roll = game.charAt(i);
             if (roll == '/') {
                 totalScore = sumSpare(totalScore, previousSum);
                 previousSum = 0;
-            }else if (Character.isDigit(roll)) {
+                bonus = true;
+            } else if (Character.isDigit(roll)) {
                 pinDowns = Character.getNumericValue(roll);
+                if (bonus) {
+                    totalScore += pinDowns;
+                }
                 totalScore += pinDowns;
                 previousSum = pinDowns;
+                bonus = false;
             } else {
                 previousSum = 0;
+                bonus = false;
             }
         }
 
