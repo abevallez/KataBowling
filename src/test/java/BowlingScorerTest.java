@@ -49,12 +49,25 @@ public class BowlingScorerTest {
         );
     }
 
+    @DataProvider
+    public static Object[][] twoOrMoreRollsWithPinDownsNoSpareNorStrike() {
+        return new Object[][] {
+                {"11------------------", 2},
+                {"-----5------1-------", 6},
+                {"--25-------7--------", 14},
+                {"-------2-------8----", 10},
+                {"----6-----7--------3", 16},
+                {"----3--5----3-------", 11},
+        };
+    }
+
     @Test
-    public void totalScoreIsSumOfPinDownsOnlyFirstFrame() {
-        int totalScore = this.bowlingScorer.totalScoreFromAGame("13------------------");
+    @UseDataProvider("twoOrMoreRollsWithPinDownsNoSpareNorStrike")
+    public void totalScoreIsSumOfPinDownsTwoOrMoreRollsNoStrikesNorSpare(String game, int totalScoreExpected) {
+        int totalScore = this.bowlingScorer.totalScoreFromAGame(game);
         assertEquals(
-                "Sum of pin downs must be 4 with 3-1 pin downs in first frame",
-                4,
+                "Sum of pin downs must be " + totalScore + "when game is " + game,
+                totalScoreExpected,
                 totalScore
         );
     }
