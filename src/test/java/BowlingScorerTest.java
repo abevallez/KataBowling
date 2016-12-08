@@ -3,6 +3,7 @@ import static org.junit.Assert.*;
 import com.tngtech.java.junit.dataprovider.DataProvider;
 import com.tngtech.java.junit.dataprovider.DataProviderRunner;
 import com.tngtech.java.junit.dataprovider.UseDataProvider;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -12,10 +13,16 @@ import org.junit.runner.RunWith;
 @RunWith(DataProviderRunner.class)
 public class BowlingScorerTest {
 
+    public BowlingScorer bowlingScorer;
+
+    @Before
+    public void setUp() {
+        this.bowlingScorer = new BowlingScorer();
+    }
+
     @Test
     public void scorerIs0WhenNoPinsDown() {
-        BowlingScorer bowlingScorer = new BowlingScorer();
-        int totalScore = bowlingScorer.totalScoreFromAGame("--------------------");
+        int totalScore = this.bowlingScorer.totalScoreFromAGame("--------------------");
         assertEquals("When no pins downs score must be 0", 0, totalScore);
     }
 
@@ -32,8 +39,7 @@ public class BowlingScorerTest {
     @Test
     @UseDataProvider("only1PinDownInTheWholeGameDataProvider")
     public void scorerIs1WhenOnly1PinDownInTheWholeGame(String game) {
-        BowlingScorer bowlingScorer = new BowlingScorer();
-        int totalScore = bowlingScorer.totalScoreFromAGame(game);
+        int totalScore = this.bowlingScorer.totalScoreFromAGame(game);
         assertEquals("When only 1 pin down in the whole game must be 1", 1, totalScore);
     }
 
