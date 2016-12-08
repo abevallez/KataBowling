@@ -119,9 +119,20 @@ public class BowlingScorerTest {
         assertEquals("spare sum 9 to total score with bonus roll missed", totalScoreExpected, totalScore);
     }
 
+    @DataProvider
+    public static Object[][] spareWithBonusInNextRoll() {
+        return new Object[][] {
+                {"11-----------/4-----", 19},
+                {"-----/9-----1-------", 28},
+                {"--25-/2----7--------", 27},
+                {"-------2-------8-/1-", 21}
+        };
+    }
+
     @Test
-    public void nextRollPinDownsCountsTwiceWhenSpare() {
-        int totalScore = this.bowlingScorer.totalScoreFromAGame("-/1-----------------");
-        assertEquals("next roll pin downs counts twice when spare", 11, totalScore);
+    @UseDataProvider("spareInGameMissingBonusWithPinDownInSameFrame")
+    public void nextRollPinDownsCountsTwiceWhenSpare(String game, int totalScoreExpected) {
+        int totalScore = this.bowlingScorer.totalScoreFromAGame(game);
+        assertEquals("next roll pin downs counts twice when spare", totalScoreExpected, totalScore);
     }
 }
