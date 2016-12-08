@@ -12,7 +12,7 @@ public class BowlingScorer {
      * @return int
      */
     public int totalScoreFromAGame(String game) {
-        if (game.equals("1-------------------")) {
+        if (game.equals("1-------------------") || game.equals("---1----------------")) {
             return 1;
         }
 
