@@ -21,7 +21,7 @@ public class BowlingScorerTest {
     }
 
     @Test
-    public void scorerIs0WhenNoPinsDown() {
+    public void scoreIs0WhenNoPinsDown() {
         int totalScore = this.bowlingScorer.totalScoreFromAGame("--------------------");
         assertEquals("When no pins downs score must be 0", 0, totalScore);
     }
@@ -40,11 +40,21 @@ public class BowlingScorerTest {
 
     @Test
     @UseDataProvider("onlyOneRollWithPinsDownInTheWholeGameDataProvider")
-    public void scorerIsSameThanPinWhenOneRollWithPinDowns(String game, int totalScoreExpected) {
+    public void scoreIsSameThanPinWhenOneRollWithPinDowns(String game, int totalScoreExpected) {
         int totalScore = this.bowlingScorer.totalScoreFromAGame(game);
         assertEquals(
                 "Scorer is " + totalScore + " when game is " + game,
                 totalScoreExpected,
+                totalScore
+        );
+    }
+
+    @Test
+    public void totalScoreIsSumOfPinDownsOnlyFirstFrame() {
+        int totalScore = this.bowlingScorer.totalScoreFromAGame("13------------------");
+        assertEquals(
+                "Sum of pin downs must be 4 with 3-1 pin downs in first frame",
+                4,
                 totalScore
         );
     }

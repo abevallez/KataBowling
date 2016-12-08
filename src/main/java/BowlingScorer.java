@@ -14,14 +14,15 @@ public class BowlingScorer {
     public int totalScoreFromAGame(String game) {
         int i;
         char roll;
+        int totalScore = 0;
 
         for (i=0; i<game.length(); i++) {
             roll = game.charAt(i);
             if (Character.isDigit(roll)) {
-                return Character.getNumericValue(roll);
+                totalScore += Character.getNumericValue(roll);
             }
         }
 
-        return 0;
+        return totalScore;
     }
 }
