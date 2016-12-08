@@ -36,4 +36,11 @@ public class BowlingScorerTest {
         int totalScore = bowlingScorer.totalScoreFromAGame(game);
         assertEquals("When only 1 pin down in the whole game must be 1", 1, totalScore);
     }
+
+    @Test
+    public void scorerIs2WhenOnlyTwoPinDownInOneRoll() {
+        BowlingScorer bowlingScorer = new BowlingScorer();
+        int totalScore = bowlingScorer.totalScoreFromAGame("--2-----------------");
+        assertEquals("When only 2 pin down in one roll must be 2", 2, totalScore);
+    }
 }

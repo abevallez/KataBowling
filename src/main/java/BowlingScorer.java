@@ -17,6 +17,10 @@ public class BowlingScorer {
             return 1;
         }
 
+        if (game.contains("2")) {
+            return 2;
+        }
+
         return 0;
     }
 }
