@@ -73,6 +73,16 @@ public class BowlingScorerTest {
         );
     }
 
+    @DataProvider
+    public static Object[][] spareInGameMissingBonus() {
+        return new Object[][] {
+                {"11-----------/------", 11},
+                {"-----/------1-------", 10},
+                {"--25-/-----7--------", 23},
+                {"-------2-------8-/--", 19}
+        };
+    }
+
     @Test
     public void scoreIs9WhenOnlyOneSpare()
     {
@@ -85,5 +95,13 @@ public class BowlingScorerTest {
     {
         int totalScore = this.bowlingScorer.totalScoreFromAGame("-/-/----------------");
         assertEquals("When two spares not consecutive score must be 18", 18, totalScore);
+    }
+
+    @Test
+    @UseDataProvider("spareInGameMissingBonus")
+    public void spareSum9ToTotalScoreWithBonusRollMissed(String game, int totalScoreExpected)
+    {
+        int totalScore = this.bowlingScorer.totalScoreFromAGame(game);
+        assertEquals("spare sum 9 to total score with bonus roll missed", totalScoreExpected, totalScore);
     }
 }
