@@ -24,6 +24,8 @@ public class BowlingScorer {
         for (i=0; i<game.length(); i++) {
             roll = game.charAt(i);
             switch (roll) {
+                case 'X':
+                    this.totalScore = 10;
                 case '-':
                     pinDowns = 0;
                     bonus = false;

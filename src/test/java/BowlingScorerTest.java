@@ -136,4 +136,11 @@ public class BowlingScorerTest {
         int totalScore = this.bowlingScorer.totalScoreFromAGame(game);
         assertEquals("next roll pin downs counts twice when spare", totalScoreExpected, totalScore);
     }
+
+    @Test
+    public void scoreIs10WhenOnlyOneStrike()
+    {
+        int totalScore = this.bowlingScorer.totalScoreFromAGame("X------------------");
+        assertEquals("Score is 10 when only one Strike", 10, totalScore);
+    }
 }
