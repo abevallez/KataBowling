@@ -26,4 +26,11 @@ public class BowlingScorerTest {
         int totalScore = bowlingScorer.totalScoreFromAGame("---1----------------");
         assertEquals("When only 1 pin down in second frame score must be 1", 1, totalScore);
     }
+
+    @Test
+    public void scorerIs1WhenOnly1PinDownInLastFrame() {
+        BowlingScorer bowlingScorer = new BowlingScorer();
+        int totalScore = bowlingScorer.totalScoreFromAGame("-------------------1");
+        assertEquals("When only 1 pin down in last frame score must be 1", 1, totalScore);
+    }
 }
