@@ -21,7 +21,7 @@ public class BowlingScorer {
             if (Character.isDigit(roll)) {
                 totalScore += Character.getNumericValue(roll);
             } else if (roll == '/') {
-                return 9;
+                totalScore += 9;
             }
         }
 

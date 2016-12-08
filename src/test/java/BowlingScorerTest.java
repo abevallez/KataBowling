@@ -79,4 +79,11 @@ public class BowlingScorerTest {
         int totalScore = this.bowlingScorer.totalScoreFromAGame("-/------------------");
         assertEquals("When only one spare score must be 9", 9, totalScore);
     }
+
+    @Test
+    public void scoreIs18WhenTwoSparesNotConsecutive()
+    {
+        int totalScore = this.bowlingScorer.totalScoreFromAGame("-/-/----------------");
+        assertEquals("When two spares not consecutive score must be 18", 18, totalScore);
+    }
 }
