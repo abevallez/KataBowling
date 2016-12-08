@@ -84,31 +84,38 @@ public class BowlingScorerTest {
     }
 
     @Test
-    public void scoreIs9WhenOnlyOneSpare()
-    {
+    public void scoreIs9WhenOnlyOneSpare() {
         int totalScore = this.bowlingScorer.totalScoreFromAGame("-/------------------");
         assertEquals("When only one spare score must be 9", 9, totalScore);
     }
 
     @Test
-    public void scoreIs18WhenTwoSparesNotConsecutive()
-    {
+    public void scoreIs18WhenTwoSparesNotConsecutive() {
         int totalScore = this.bowlingScorer.totalScoreFromAGame("-/-/----------------");
         assertEquals("When two spares not consecutive score must be 18", 18, totalScore);
     }
 
     @Test
     @UseDataProvider("spareInGameMissingBonus")
-    public void spareSum9ToTotalScoreWithBonusRollMissed(String game, int totalScoreExpected)
-    {
+    public void spareSum9ToTotalScoreWithBonusRollMissed(String game, int totalScoreExpected) {
         int totalScore = this.bowlingScorer.totalScoreFromAGame(game);
         assertEquals("spare sum 9 to total score with bonus roll missed", totalScoreExpected, totalScore);
     }
 
+    @DataProvider
+    public static Object[][] spareInGameMissingBonusWithPinDownInSameFrame() {
+        return new Object[][] {
+                {"11-----------/------", 11},
+                {"-----/------1-------", 10},
+                {"--25-/-----7--------", 23},
+                {"-------2-------8-/--", 19}
+        };
+    }
+
     @Test
-    public void spareSumOnly9WithPinDownsBeforeInSameFrame()
-    {
-        int totalScore = this.bowlingScorer.totalScoreFromAGame("1/------------------");
-        assertEquals("Spare sum only 9 with pin down before in same frame", 9, totalScore);
+    @UseDataProvider("spareInGameMissingBonusWithPinDownInSameFrame")
+    public void spareSumOnly9WithPinDownsBeforeInSameFrame(String game, int totalScoreExpected) {
+        int totalScore = this.bowlingScorer.totalScoreFromAGame(game);
+        assertEquals("spare sum 9 to total score with bonus roll missed", totalScoreExpected, totalScore);
     }
 }
