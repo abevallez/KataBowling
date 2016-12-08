@@ -1,9 +1,15 @@
 import static org.junit.Assert.*;
+
+import com.tngtech.java.junit.dataprovider.DataProvider;
+import com.tngtech.java.junit.dataprovider.DataProviderRunner;
+import com.tngtech.java.junit.dataprovider.UseDataProvider;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 /**
  * Bowling Scorer Test
  */
+@RunWith(DataProviderRunner.class)
 public class BowlingScorerTest {
 
     @Test
@@ -13,24 +19,21 @@ public class BowlingScorerTest {
         assertEquals("When no pins downs score must be 0", 0, totalScore);
     }
 
-    @Test
-    public void scorerIs1WhenOnly1PinDownInFirstFrame() {
-        BowlingScorer bowlingScorer = new BowlingScorer();
-        int totalScore = bowlingScorer.totalScoreFromAGame("1-------------------");
-        assertEquals("When only 1 pin down in first frame score must be 1", 1, totalScore);
+    @DataProvider
+    public static Object[][] only1PinDownInTheWholeGameDataProvider() {
+        return new Object[][] {
+                {"1-------------------"},
+                {"--1-----------------"},
+                {"-------------------1"},
+                {"------------1-------"},
+        };
     }
 
     @Test
-    public void scorerIs1WhenOnly1PinDownInSecondFrame() {
+    @UseDataProvider("only1PinDownInTheWholeGameDataProvider")
+    public void scorerIs1WhenOnly1PinDownInTheWholeGame(String game) {
         BowlingScorer bowlingScorer = new BowlingScorer();
-        int totalScore = bowlingScorer.totalScoreFromAGame("---1----------------");
-        assertEquals("When only 1 pin down in second frame score must be 1", 1, totalScore);
-    }
-
-    @Test
-    public void scorerIs1WhenOnly1PinDownInLastFrame() {
-        BowlingScorer bowlingScorer = new BowlingScorer();
-        int totalScore = bowlingScorer.totalScoreFromAGame("-------------------1");
-        assertEquals("When only 1 pin down in last frame score must be 1", 1, totalScore);
+        int totalScore = bowlingScorer.totalScoreFromAGame(game);
+        assertEquals("When only 1 pin down in the whole game must be 1", 1, totalScore);
     }
 }
