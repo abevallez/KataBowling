@@ -7,6 +7,8 @@ public class BowlingScorer {
 
     static final int SPARE_VALUE = 9;
 
+    protected int totalScore;
+
     /**
      * Produce the total Score from a Bowling Game
      *
@@ -16,45 +18,60 @@ public class BowlingScorer {
     public int totalScoreFromAGame(String game) {
         int i;
         char roll;
-        int totalScore = 0;
-        int previousSum = 0;
-        int pinDowns;
+        int pinDowns = 0;
         boolean bonus = false;
 
         for (i=0; i<game.length(); i++) {
             roll = game.charAt(i);
-            if (roll == '/') {
-                totalScore = sumSpare(totalScore, previousSum);
-                previousSum = 0;
-                bonus = true;
-            } else if (Character.isDigit(roll)) {
-                pinDowns = Character.getNumericValue(roll);
-                if (bonus) {
-                    totalScore += pinDowns;
-                }
-                totalScore += pinDowns;
-                previousSum = pinDowns;
-                bonus = false;
-            } else {
-                previousSum = 0;
-                bonus = false;
+            switch (roll) {
+                case '-':
+                    pinDowns = 0;
+                    bonus = false;
+                    break;
+                case '/':
+                    sumSpareToTotalScore(pinDowns);
+                    bonus = true;
+                    break;
+                case '1':
+                case '2':
+                case '3':
+                case '4':
+                case '5':
+                case '6':
+                case '7':
+                case '8':
+                case '9':
+                    pinDowns = Character.getNumericValue(roll);
+                    sumPinDownsToTotalScore(pinDowns, bonus);
+                    bonus = false;
+                    break;
+
             }
         }
 
-        return totalScore;
+        return this.totalScore;
+    }
+
+    /**
+     *
+     * @param pinDowns
+     * @param bonus
+     * @return
+     */
+    protected void sumPinDownsToTotalScore(int pinDowns, boolean bonus) {
+        if (bonus) {
+            this.totalScore += pinDowns;
+        }
+        this.totalScore += pinDowns;
     }
 
     /**
      * Sum Spare to totalScore correctly.
      *
-     * @param totalScore
      * @param previousSum
-     *
-     * @return totalScore
      */
-    protected int sumSpare(int totalScore, int previousSum) {
-        totalScore -= previousSum;
-        totalScore += SPARE_VALUE;
-        return totalScore;
+    protected void sumSpareToTotalScore(int previousSum) {
+        this.totalScore -= previousSum;
+        this.totalScore += SPARE_VALUE;
     }
 }
