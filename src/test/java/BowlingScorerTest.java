@@ -72,4 +72,11 @@ public class BowlingScorerTest {
                 totalScore
         );
     }
+
+    @Test
+    public void scoreIs9WhenOnlyOneSpare()
+    {
+        int totalScore = this.bowlingScorer.totalScoreFromAGame("-/------------------");
+        assertEquals("When only one spare score must be 9", 9, totalScore);
+    }
 }
