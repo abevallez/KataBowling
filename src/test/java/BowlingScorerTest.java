@@ -36,6 +36,16 @@ public class BowlingScorerTest {
         };
     }
 
+    @DataProvider
+    public static Object[][] only2PinDownInTheWholeGameDataProvider() {
+        return new Object[][] {
+                {"2-------------------"},
+                {"--2-----------------"},
+                {"-------------------2"},
+                {"------------2-------"},
+        };
+    }
+
     @Test
     @UseDataProvider("only1PinDownInTheWholeGameDataProvider")
     public void scorerIs1WhenOnly1PinDownInTheWholeGame(String game) {
@@ -44,9 +54,9 @@ public class BowlingScorerTest {
     }
 
     @Test
-    public void scorerIs2WhenOnlyTwoPinDownInOneRoll() {
-        BowlingScorer bowlingScorer = new BowlingScorer();
-        int totalScore = bowlingScorer.totalScoreFromAGame("--2-----------------");
-        assertEquals("When only 2 pin down in one roll must be 2", 2, totalScore);
+    @UseDataProvider("only2PinDownInTheWholeGameDataProvider")
+    public void scorerIs2WhenOnly2PinDownInTheWholeGame(String game) {
+        int totalScore = this.bowlingScorer.totalScoreFromAGame(game);
+        assertEquals("When only 2 pin down in the whole game must be 2", 2, totalScore);
     }
 }
