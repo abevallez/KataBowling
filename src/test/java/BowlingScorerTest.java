@@ -104,4 +104,11 @@ public class BowlingScorerTest {
         int totalScore = this.bowlingScorer.totalScoreFromAGame(game);
         assertEquals("spare sum 9 to total score with bonus roll missed", totalScoreExpected, totalScore);
     }
+
+    @Test
+    public void spareSumOnly9WithPinDownsBeforeInSameFrame()
+    {
+        int totalScore = this.bowlingScorer.totalScoreFromAGame("1/------------------");
+        assertEquals("Spare sum only 9 with pin down before in same frame", 9, totalScore);
+    }
 }
