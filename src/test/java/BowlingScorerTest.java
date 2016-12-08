@@ -46,6 +46,16 @@ public class BowlingScorerTest {
         };
     }
 
+    @DataProvider
+    public static Object[][] only3PinDownInTheWholeGameDataProvider() {
+        return new Object[][] {
+                {"3-------------------"},
+                {"--3-----------------"},
+                {"-------------------3"},
+                {"------------3-------"},
+        };
+    }
+
     @Test
     @UseDataProvider("only1PinDownInTheWholeGameDataProvider")
     public void scorerIs1WhenOnly1PinDownInTheWholeGame(String game) {
@@ -58,5 +68,12 @@ public class BowlingScorerTest {
     public void scorerIs2WhenOnly2PinDownInTheWholeGame(String game) {
         int totalScore = this.bowlingScorer.totalScoreFromAGame(game);
         assertEquals("When only 2 pin down in the whole game must be 2", 2, totalScore);
+    }
+
+    @Test
+    @UseDataProvider("only3PinDownInTheWholeGameDataProvider")
+    public void scorerIs3WhenOnly3PinDownInTheWholeGame(String game) {
+        int totalScore = this.bowlingScorer.totalScoreFromAGame(game);
+        assertEquals("When only 3 pin down in the whole game must be 3", 3, totalScore);
     }
 }
