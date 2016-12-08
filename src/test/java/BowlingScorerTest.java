@@ -143,4 +143,21 @@ public class BowlingScorerTest {
         int totalScore = this.bowlingScorer.totalScoreFromAGame("X------------------");
         assertEquals("Score is 10 when only one Strike", 10, totalScore);
     }
+
+    @DataProvider
+    public static Object[][] strikeWithBonusMissed() {
+        return new Object[][] {
+                {"X-----------X-----", 20},
+                {"-----X-----1-------", 11},
+                {"--X--X--7--------", 27},
+                {"-------2-------8X--", 20}
+        };
+    }
+
+    @Test
+    @UseDataProvider("strikeWithBonusMissed")
+    public void strikeWithBonusMissedSum10ToTotalScore(String game, int totalScoreExpected) {
+        int totalScore = this.bowlingScorer.totalScoreFromAGame(game);
+        assertEquals("strike without bonus missed sum 10 to total score", totalScoreExpected, totalScore);
+    }
 }

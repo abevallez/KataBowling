@@ -6,6 +6,7 @@
 public class BowlingScorer {
 
     static final int SPARE_VALUE = 9;
+    static final int STRIKE_VALUE = 10;
 
     protected int totalScore;
 
@@ -25,7 +26,7 @@ public class BowlingScorer {
             roll = game.charAt(i);
             switch (roll) {
                 case 'X':
-                    this.totalScore = 10;
+                    this.totalScore += STRIKE_VALUE;
                 case '-':
                     pinDowns = 0;
                     bonus = false;
