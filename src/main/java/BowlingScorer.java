@@ -21,8 +21,8 @@ public class BowlingScorer {
         char roll;
         int pinDowns = 0;
         boolean bonus;
-        boolean strike = false;
-        boolean spare = false;
+        boolean bonusForStrike = false;
+        boolean bonusForSpare = false;
 
 
         for (i=0; i<game.length(); i++) {
@@ -30,19 +30,20 @@ public class BowlingScorer {
             switch (roll) {
                 case 'X':
                     this.totalScore += STRIKE_VALUE;
-                    strike = true;
+                    bonusForStrike = true;
+                    bonusForSpare = false;
                     break;
                 case '/':
                     sumSpareToTotalScore(pinDowns);
-                    strike = false;
-                    spare = true;
+                    bonusForStrike = false;
+                    bonusForSpare = true;
                     break;
                 default:
-                    bonus = this.hasBonus(strike, spare);
+                    bonus = this.hasBonus(bonusForStrike, bonusForSpare);
                     pinDowns = getPinDowns(roll);
                     sumPinDownsToTotalScore(pinDowns, bonus);
-                    strike = false;
-                    spare = false;
+                    bonusForStrike = false;
+                    bonusForSpare = false;
                     break;
 
             }
@@ -86,13 +87,13 @@ public class BowlingScorer {
     /**
      * Calculate if has bonus in this roll
      *
-     * @param strike
-     * @param spare
+     * @param BonusForStrike
+     * @param BonusForSpare
      *
      * @return
      */
-    protected boolean hasBonus(boolean strike, boolean spare) {
-        if (strike || spare) {
+    protected boolean hasBonus(boolean BonusForStrike, boolean BonusForSpare) {
+        if (BonusForStrike || BonusForSpare) {
             return true;
         }
         return false;
