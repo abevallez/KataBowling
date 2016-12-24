@@ -19,10 +19,10 @@ public class BowlingScorer {
     public int totalScoreFromAGame(String game) {
         int i;
         char roll;
-        int numberRollInFrame;
         int pinDowns = 0;
-        boolean bonus = false;
+        boolean bonus;
         boolean strike = false;
+        boolean spare = false;
 
 
         for (i=0; i<game.length(); i++) {
@@ -30,33 +30,19 @@ public class BowlingScorer {
             switch (roll) {
                 case 'X':
                     this.totalScore += STRIKE_VALUE;
-                    bonus = true;
                     strike = true;
-                    break;
-                case '-':
-                    pinDowns = 0;
-                    bonus = false;
                     break;
                 case '/':
                     sumSpareToTotalScore(pinDowns);
-                    bonus = true;
+                    strike = false;
+                    spare = true;
                     break;
-                case '1':
-                case '2':
-                case '3':
-                case '4':
-                case '5':
-                case '6':
-                case '7':
-                case '8':
-                case '9':
-                    pinDowns = Character.getNumericValue(roll);
+                default:
+                    bonus = this.hasBonus(strike, spare);
+                    pinDowns = getPinDowns(roll);
                     sumPinDownsToTotalScore(pinDowns, bonus);
-                    if (strike) {
-                        strike = false;
-                    } else {
-                        bonus = false;
-                    }
+                    strike = false;
+                    spare = false;
                     break;
 
             }
@@ -69,6 +55,7 @@ public class BowlingScorer {
      *
      * @param pinDowns
      * @param bonus
+     *
      * @return
      */
     protected void sumPinDownsToTotalScore(int pinDowns, boolean bonus) {
@@ -76,6 +63,14 @@ public class BowlingScorer {
             this.totalScore += pinDowns;
         }
         this.totalScore += pinDowns;
+    }
+
+    protected int getPinDowns(char roll) {
+        if ('-' == roll) {
+            return 0;
+        }
+
+        return Character.getNumericValue(roll);
     }
 
     /**
@@ -86,5 +81,20 @@ public class BowlingScorer {
     protected void sumSpareToTotalScore(int previousSum) {
         this.totalScore -= previousSum;
         this.totalScore += SPARE_VALUE;
+    }
+
+    /**
+     * Calculate if has bonus in this roll
+     *
+     * @param strike
+     * @param spare
+     *
+     * @return
+     */
+    protected boolean hasBonus(boolean strike, boolean spare) {
+        if (strike || spare) {
+            return true;
+        }
+        return false;
     }
 }
