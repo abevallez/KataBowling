@@ -19,14 +19,20 @@ public class BowlingScorer {
     public int totalScoreFromAGame(String game) {
         int i;
         char roll;
+        int numberRollInFrame;
         int pinDowns = 0;
         boolean bonus = false;
+        boolean strike = false;
+
 
         for (i=0; i<game.length(); i++) {
             roll = game.charAt(i);
             switch (roll) {
                 case 'X':
                     this.totalScore += STRIKE_VALUE;
+                    bonus = true;
+                    strike = true;
+                    break;
                 case '-':
                     pinDowns = 0;
                     bonus = false;
@@ -46,7 +52,11 @@ public class BowlingScorer {
                 case '9':
                     pinDowns = Character.getNumericValue(roll);
                     sumPinDownsToTotalScore(pinDowns, bonus);
-                    bonus = false;
+                    if (strike) {
+                        strike = false;
+                    } else {
+                        bonus = false;
+                    }
                     break;
 
             }

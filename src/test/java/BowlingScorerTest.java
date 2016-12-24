@@ -160,4 +160,10 @@ public class BowlingScorerTest {
         int totalScore = this.bowlingScorer.totalScoreFromAGame(game);
         assertEquals("strike without bonus missed sum 10 to total score", totalScoreExpected, totalScore);
     }
+
+    @Test
+    public void oneStrikeWithNextFrameOnlyOnePinDown() {
+        int totalScore = this.bowlingScorer.totalScoreFromAGame("X1-----------------");
+        assertEquals("Score is 12 when only one Strike and 1 pin in next frame", 12, totalScore);
+    }
 }
