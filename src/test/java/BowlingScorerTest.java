@@ -179,4 +179,11 @@ public class BowlingScorerTest {
         int totalScore = this.bowlingScorer.totalScoreFromAGame(game);
         assertEquals("strike give two next roll with bonus", totalScoreExpected, totalScore);
     }
+
+    @Test
+    public void perfectGame()
+    {
+        int totalScore = this.bowlingScorer.totalScoreFromAGame("XXXXXXXXXXXX");
+        assertEquals("Perfect Game is 300!!", 300, totalScore);
+    }
 }

@@ -11,6 +11,8 @@ public class BowlingScorer {
     protected int pinsDownBefore;
     protected int rollsWithBonusForStrike = 0;
     protected boolean rollHasBonusForSpare = false;
+    protected int frame = 1;
+    protected int roll = 1;
 
 
     /**
@@ -25,18 +27,35 @@ public class BowlingScorer {
             switch (markRoll) {
                 case 'X':
                     processStrike();
+                    this.frame++;
+                    this.roll = 1;
                     break;
                 case '/':
                     processSpare();
+                    this.frame++;
+                    this.roll = 1;
                     break;
                 default:
                     sumPinDownsToTotalScore(getPinDowns(markRoll));
+                    setRollAndFrame();
                     break;
 
             }
         }
 
         return this.totalScore;
+    }
+
+    /**
+     * Set new roll and frame
+     */
+    protected void setRollAndFrame() {
+        if (this.roll == 2) {
+            this.frame++;
+            this.roll = 1;
+        } else {
+            this.roll++;
+        }
     }
 
     /**
@@ -52,7 +71,9 @@ public class BowlingScorer {
      */
     protected void processStrike() {
         sumPinDownsToTotalScore(STRIKE_VALUE);
-        this.rollsWithBonusForStrike = this.rollsWithBonusForStrike + 2;
+        if (frame <= 10) {
+            this.rollsWithBonusForStrike = this.rollsWithBonusForStrike + 2;
+        }
     }
 
     /**
@@ -62,11 +83,18 @@ public class BowlingScorer {
      * @return
      */
     protected void sumPinDownsToTotalScore(int pinDowns) {
-        int scoreToAdd = pinDowns;
-        this.pinsDownBefore = pinDowns;
+        int scoreToAdd = 0;
 
-        scoreToAdd = addBonusForSpare(pinDowns, scoreToAdd);
-        scoreToAdd = addBonusForStrike(pinDowns, scoreToAdd);
+        if (this.frame <= 10) {
+            scoreToAdd += addBonusForSpare(pinDowns);
+        }
+
+        if (this.frame <= 11) {
+            scoreToAdd += addBonusForStrike(pinDowns);
+        }
+
+        scoreToAdd += pinDowns;
+        this.pinsDownBefore = pinDowns;
 
         this.totalScore += scoreToAdd;
     }
@@ -75,33 +103,38 @@ public class BowlingScorer {
      * Add bonus for spare
      *
      * @param pinDowns
-     * @param scoreToAdd
+     *
      * @return
      */
-    private int addBonusForSpare(int pinDowns, int scoreToAdd) {
-        if (this.rollHasBonusForSpare) {
-            scoreToAdd += pinDowns;
+    private int addBonusForSpare(int pinDowns) {
+        int bonusScore = 0;
+
+        if (this.rollHasBonusForSpare && this.frame <= 10) {
+            bonusScore = pinDowns;
             this.rollHasBonusForSpare = false;
         }
-        return scoreToAdd;
+        return bonusScore;
     }
 
     /**
      * Add Bonus for Strike
      *
      * @param pinDowns
-     * @param scoreToAdd
+     *
      * @return
      */
-    private int addBonusForStrike(int pinDowns, int scoreToAdd) {
-        if (this.rollsWithBonusForStrike > 2) {
-            scoreToAdd += pinDowns * 2;
-            this.rollsWithBonusForStrike = this.rollsWithBonusForStrike - 2;
-        } else if (this.rollsWithBonusForStrike > 0 && this.rollsWithBonusForStrike <=2) {
-            scoreToAdd += pinDowns;
+    private int addBonusForStrike(int pinDowns) {
+        int bonusScore = 0;
+
+        if ((this.rollsWithBonusForStrike > 0 && this.rollsWithBonusForStrike <=2) || this.frame > 10) {
+                bonusScore = pinDowns;
             this.rollsWithBonusForStrike--;
+        } else if (this.rollsWithBonusForStrike > 2) {
+            bonusScore =  pinDowns * 2;
+            this.rollsWithBonusForStrike = this.rollsWithBonusForStrike - 2;
         }
-        return scoreToAdd;
+
+        return bonusScore;
     }
 
     /**
