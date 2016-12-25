@@ -162,8 +162,26 @@ public class BowlingScorerTest {
     }
 
     @Test
-    public void oneStrikeWithNextFrameOnlyOnePinDown() {
+    public void oneStrikeWithNextRollOnlyOnePinDown() {
         int totalScore = this.bowlingScorer.totalScoreFromAGame("X1-----------------");
         assertEquals("Score is 12 when only one Strike and 1 pin in next frame", 12, totalScore);
+    }
+
+    @Test
+    public void oneStrikeWithNextFrameOnlyOnePinDownInSecondRoll() {
+        int totalScore = this.bowlingScorer.totalScoreFromAGame("X-1----------------");
+        assertEquals("Score is 12 when only one Strike and 1 pin in second roll in next frame", 12, totalScore);
+    }
+
+    @Test
+    public void strikeSumDoubleAfterOneStrike() {
+        int totalScore = this.bowlingScorer.totalScoreFromAGame("XX----------------");
+        assertEquals("Strike count double after one strike", 30, totalScore);
+    }
+
+    @Test
+    public void spareSumDoubleAfterOneStrike() {
+        int totalScore = this.bowlingScorer.totalScoreFromAGame("X1/----------------");
+        assertEquals("Strike count double after one strike", 28, totalScore);
     }
 }

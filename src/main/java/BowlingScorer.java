@@ -7,8 +7,15 @@ public class BowlingScorer {
 
     static final int SPARE_VALUE = 9;
     static final int STRIKE_VALUE = 10;
+    static final int FIRST_ROLL = 1;
+    static final int SECOND_ROLL = 2;
 
     protected int totalScore;
+    protected int scoreAddedFrameBefore;
+    protected boolean bonusForStrike = false;
+    protected boolean bonusForSpare = false;
+    protected int numRollOnFrame = 0;
+
 
     /**
      * Produce the total Score from a Bowling Game
@@ -17,39 +24,68 @@ public class BowlingScorer {
      * @return int
      */
     public int totalScoreFromAGame(String game) {
-        int i;
-        char roll;
-        int pinDowns = 0;
-        boolean bonus;
-        boolean bonusForStrike = false;
-        boolean bonusForSpare = false;
-
-
-        for (i=0; i<game.length(); i++) {
-            roll = game.charAt(i);
-            switch (roll) {
+        for (int i=0; i<game.length(); i++) {
+            char markRoll = game.charAt(i);
+            setNewRollOnFrame();
+            switch (markRoll) {
                 case 'X':
-                    this.totalScore += STRIKE_VALUE;
-                    bonusForStrike = true;
-                    bonusForSpare = false;
+                    processStrike();
                     break;
                 case '/':
-                    sumSpareToTotalScore(pinDowns);
-                    bonusForStrike = false;
-                    bonusForSpare = true;
+                    processSpare();
                     break;
                 default:
-                    bonus = this.hasBonus(bonusForStrike, bonusForSpare);
-                    pinDowns = getPinDowns(roll);
-                    sumPinDownsToTotalScore(pinDowns, bonus);
-                    bonusForStrike = false;
-                    bonusForSpare = false;
+                    processPinDowns(markRoll);
                     break;
 
             }
         }
 
         return this.totalScore;
+    }
+
+    /**
+     * Process normal pin downs play.
+     *
+     * @param markRoll
+     */
+    protected void processPinDowns(char markRoll) {
+        sumPinDownsToTotalScore(getPinDowns(markRoll), this.hasBonus());
+        if (SECOND_ROLL == this.numRollOnFrame) {
+            bonusForStrike = false;
+        }
+        this.bonusForSpare = false;
+    }
+
+    /**
+     * Process spare play.
+     */
+    protected void processSpare() {
+        sumSpareToTotalScore(this.hasBonus());
+        this.bonusForStrike = false;
+        this.bonusForSpare = true;
+    }
+
+    /**
+     * Process Strike play.
+     */
+    protected void processStrike() {
+        sumPinDownsToTotalScore(STRIKE_VALUE, this.hasBonus());
+        this.bonusForStrike = true;
+        this.bonusForSpare = false;
+        this.numRollOnFrame = SECOND_ROLL;
+    }
+
+    /**
+     * Get correct num of roll on frame.
+     *
+     */
+    protected void setNewRollOnFrame() {
+        if (this.numRollOnFrame == FIRST_ROLL) {
+            this.numRollOnFrame = SECOND_ROLL;
+        } else {
+            this.numRollOnFrame = FIRST_ROLL;
+        }
     }
 
     /**
@@ -60,10 +96,12 @@ public class BowlingScorer {
      * @return
      */
     protected void sumPinDownsToTotalScore(int pinDowns, boolean bonus) {
+        int scoreToAdd = pinDowns;
         if (bonus) {
-            this.totalScore += pinDowns;
+            scoreToAdd += pinDowns;
         }
-        this.totalScore += pinDowns;
+        this.totalScore += scoreToAdd;
+        this.scoreAddedFrameBefore = scoreToAdd;
     }
 
     protected int getPinDowns(char roll) {
@@ -77,23 +115,21 @@ public class BowlingScorer {
     /**
      * Sum Spare to totalScore correctly.
      *
-     * @param previousSum
+     * @param bonus
      */
-    protected void sumSpareToTotalScore(int previousSum) {
-        this.totalScore -= previousSum;
-        this.totalScore += SPARE_VALUE;
+    protected void sumSpareToTotalScore(boolean bonus) {
+        this.totalScore -= this.scoreAddedFrameBefore;
+        this.sumPinDownsToTotalScore(SPARE_VALUE, bonus);
     }
 
     /**
      * Calculate if has bonus in this roll
      *
-     * @param BonusForStrike
-     * @param BonusForSpare
      *
      * @return
      */
-    protected boolean hasBonus(boolean BonusForStrike, boolean BonusForSpare) {
-        if (BonusForStrike || BonusForSpare) {
+    protected boolean hasBonus() {
+        if (this.bonusForStrike|| this.bonusForSpare) {
             return true;
         }
         return false;
