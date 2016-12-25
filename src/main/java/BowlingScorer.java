@@ -5,7 +5,6 @@
  */
 public class BowlingScorer {
 
-    static final int SPARE_VALUE = 9;
     static final int STRIKE_VALUE = 10;
 
     protected int totalScore;
@@ -44,7 +43,7 @@ public class BowlingScorer {
      * Process spare play.
      */
     protected void processSpare() {
-        this.sumPinDownsToTotalScore(SPARE_VALUE - this.pinsDownBefore);
+        this.sumPinDownsToTotalScore(STRIKE_VALUE - this.pinsDownBefore);
         this.rollHasBonusForSpare = true;
     }
 

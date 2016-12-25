@@ -76,39 +76,39 @@ public class BowlingScorerTest {
     @DataProvider
     public static Object[][] spareInGameMissingBonus() {
         return new Object[][] {
-                {"11-----------/------", 11},
-                {"-----/------1-------", 10},
-                {"--25-/-----7--------", 23},
-                {"-------2-------8-/--", 19}
+                {"11-----------/------", 12},
+                {"-----/------1-------", 11},
+                {"--25-/-----7--------", 24},
+                {"-------2-------8-/--", 20}
         };
     }
 
     @Test
     public void scoreIs9WhenOnlyOneSpare() {
         int totalScore = this.bowlingScorer.totalScoreFromAGame("-/------------------");
-        assertEquals("When only one spare score must be 9", 9, totalScore);
+        assertEquals("When only one spare score must be 10", 10, totalScore);
     }
 
     @Test
     public void scoreIs18WhenTwoSparesNotConsecutive() {
         int totalScore = this.bowlingScorer.totalScoreFromAGame("-/-/----------------");
-        assertEquals("When two spares not consecutive score must be 18", 18, totalScore);
+        assertEquals("When two spares not consecutive score must be 20", 20, totalScore);
     }
 
     @Test
     @UseDataProvider("spareInGameMissingBonus")
     public void spareSum9ToTotalScoreWithBonusRollMissed(String game, int totalScoreExpected) {
         int totalScore = this.bowlingScorer.totalScoreFromAGame(game);
-        assertEquals("spare sum 9 to total score with bonus roll missed", totalScoreExpected, totalScore);
+        assertEquals("spare sum 10 to total score with bonus roll missed", totalScoreExpected, totalScore);
     }
 
     @DataProvider
     public static Object[][] spareInGameMissingBonusWithPinDownInSameFrame() {
         return new Object[][] {
-                {"11-----------/------", 11},
-                {"-----/------1-------", 10},
-                {"--25-/-----7--------", 23},
-                {"-------2-------8-/--", 19}
+                {"11-----------/------", 12},
+                {"-----/------1-------", 11},
+                {"--25-/-----7--------", 24},
+                {"-------2-------8-/--", 20}
         };
     }
 
@@ -116,7 +116,7 @@ public class BowlingScorerTest {
     @UseDataProvider("spareInGameMissingBonusWithPinDownInSameFrame")
     public void spareSumOnly9WithPinDownsBeforeInSameFrame(String game, int totalScoreExpected) {
         int totalScore = this.bowlingScorer.totalScoreFromAGame(game);
-        assertEquals("spare sum 9 to total score with bonus roll missed", totalScoreExpected, totalScore);
+        assertEquals("spare sum 10 to total score with bonus roll missed", totalScoreExpected, totalScore);
     }
 
     @DataProvider
@@ -124,15 +124,15 @@ public class BowlingScorerTest {
         return new Object[][] {
                 {"11-----------/4-----", 19},
                 {"-----/9-----1-------", 28},
-                {"--25-/2----7--------", 27},
-                {"-------2-------8-/1-", 21},
+                {"--25-/2----7--------", 28},
+                {"-------2-------8-/1-", 22},
                 {"5/5/5/5/5/5/5/5/5/5/5", 150}
         };
     }
 
     @Test
     @UseDataProvider("spareInGameMissingBonusWithPinDownInSameFrame")
-    public void nextRollPinDownsCountsTwiceWhenSpare(String game, int totalScoreExpected) {
+    public void spareGiveNextRollWithBonus(String game, int totalScoreExpected) {
         int totalScore = this.bowlingScorer.totalScoreFromAGame(game);
         assertEquals("next roll pin downs counts twice when spare", totalScoreExpected, totalScore);
     }
@@ -161,33 +161,22 @@ public class BowlingScorerTest {
         assertEquals("strike without bonus missed sum 10 to total score", totalScoreExpected, totalScore);
     }
 
-    @Test
-    public void oneStrikeWithNextRollOnlyOnePinDown() {
-        int totalScore = this.bowlingScorer.totalScoreFromAGame("X1-----------------");
-        assertEquals("Score is 12 when only one Strike and 1 pin in next frame", 12, totalScore);
+    @DataProvider
+    public static Object[][] consecutiveStrikeAndBonus() {
+        return new Object[][] {
+                {"X1-----------------", 12},
+                {"X-1----------------", 12},
+                {"XX----------------", 30},
+                {"X1/----------------", 30},
+                {"XXX---------------", 60},
+                {"XX1/---------------", 51}
+        };
     }
 
     @Test
-    public void oneStrikeWithNextFrameOnlyOnePinDownInSecondRoll() {
-        int totalScore = this.bowlingScorer.totalScoreFromAGame("X-1----------------");
-        assertEquals("Score is 12 when only one Strike and 1 pin in second roll in next frame", 12, totalScore);
-    }
-
-    @Test
-    public void strikeSumDoubleAfterOneStrike() {
-        int totalScore = this.bowlingScorer.totalScoreFromAGame("XX----------------");
-        assertEquals("Strike count double after one strike", 30, totalScore);
-    }
-
-    @Test
-    public void spareSumDoubleAfterOneStrike() {
-        int totalScore = this.bowlingScorer.totalScoreFromAGame("X1/----------------");
-        assertEquals("Strike count double after one strike", 28, totalScore);
-    }
-
-    @Test
-    public void bonusWithTwoStrikesBefore() {
-        int totalScore = this.bowlingScorer.totalScoreFromAGame("XXX---------------");
-        assertEquals("Strike count double after one strike", 60, totalScore);
+    @UseDataProvider("consecutiveStrikeAndBonus")
+    public void strikeGiveTwoRollsWithBonus(String game, int totalScoreExpected) {
+        int totalScore = this.bowlingScorer.totalScoreFromAGame(game);
+        assertEquals("strike give two next roll with bonus", totalScoreExpected, totalScore);
     }
 }
