@@ -184,4 +184,10 @@ public class BowlingScorerTest {
         int totalScore = this.bowlingScorer.totalScoreFromAGame("X1/----------------");
         assertEquals("Strike count double after one strike", 28, totalScore);
     }
+
+    @Test
+    public void bonusWithTwoStrikesBefore() {
+        int totalScore = this.bowlingScorer.totalScoreFromAGame("XXX---------------");
+        assertEquals("Strike count double after one strike", 60, totalScore);
+    }
 }
