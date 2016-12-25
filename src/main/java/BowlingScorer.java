@@ -85,13 +85,8 @@ public class BowlingScorer {
     protected void sumPinDownsToTotalScore(int pinDowns) {
         int scoreToAdd = 0;
 
-        if (this.frame <= 10) {
-            scoreToAdd += addBonusForSpare(pinDowns);
-        }
-
-        if (this.frame <= 11) {
-            scoreToAdd += addBonusForStrike(pinDowns);
-        }
+        scoreToAdd += addBonusForSpare(pinDowns);
+        scoreToAdd += addBonusForStrike(pinDowns);
 
         scoreToAdd += pinDowns;
         this.pinsDownBefore = pinDowns;
@@ -126,8 +121,12 @@ public class BowlingScorer {
     private int addBonusForStrike(int pinDowns) {
         int bonusScore = 0;
 
-        if ((this.rollsWithBonusForStrike > 0 && this.rollsWithBonusForStrike <=2) || this.frame > 10) {
-                bonusScore = pinDowns;
+        if (this.frame == 12) {
+            return bonusScore;
+        }
+
+        if ((this.rollsWithBonusForStrike > 0 && this.rollsWithBonusForStrike <=2) || this.frame == 11) {
+            bonusScore = pinDowns;
             this.rollsWithBonusForStrike--;
         } else if (this.rollsWithBonusForStrike > 2) {
             bonusScore =  pinDowns * 2;
